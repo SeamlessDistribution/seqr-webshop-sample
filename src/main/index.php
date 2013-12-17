@@ -48,7 +48,7 @@ array(
             "currency" => "USD",
             "value" => "500"
         ),
-        "backURL" => "http://devapi.seqr.com/sample/done.php?foo=bar",
+        "backURL" => "http://devapi.seqr.com/seqr-webshop-sample/done.php?foo=bar",
         "invoiceRows" =>
         array(
             "invoiceRow" =>
@@ -76,7 +76,7 @@ print_r("-->");
 ?><!DOCTYPE html>
 <html>
 <head>
-    <title>Webshop Demo</title>
+    <title>Webshop Demo, 2013-12-17.1</title>
     <style>
         body {
             width: 35em;
