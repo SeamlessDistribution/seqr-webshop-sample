@@ -48,7 +48,7 @@ array(
             "currency" => "USD",
             "value" => "500"
         ),
-        "backURL" => "http://devapi.seqr.com/sample/done.php",
+        "backURL" => "http://devapi.seqr.com/sample/done.php?foo=bar",
         "invoiceRows" =>
         array(
             "invoiceRow" =>
