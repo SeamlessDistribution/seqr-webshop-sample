@@ -100,6 +100,11 @@ print_r("-->");
 <br/>
 <br/>
 <a href="http://developer.seqr.com/app">Make sure you have downloaded the development app to proceed with the demo!</a>
+<br/>
+<br/>
+<a href="https://github.com/SeamlessDistribution/seqr-webshop-sample">Source code for this sample, check how easy it is!</a>
+
+
 
 <div class="span12">
     <div class="row">
