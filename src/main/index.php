@@ -45,11 +45,12 @@
 
     }
 </script>
-<br/>
-<br/>
-<br/>
-<a href="http://developer.seqr.com/app">Make sure you have downloaded the development app to proceed with the demo!</a>
-
+<p>
+    <a href="http://developer.seqr.com/app">Make sure you have downloaded the development app to proceed with the demo!</a>
+</p>
+<p>
+    <a href="https://github.com/SeamlessDistribution/seqr-webshop-sample">Source code for this sample, check how easy it is!</a>
+</p>
 <div class="span12">
     <div class="row">
 
