@@ -1,79 +1,4 @@
-<?php
-
-
-$soapClient = new SoapClient("http://seqrextdev4/extclientproxy/service/v2?wsdl");
-
-/*
-  sample request:
-	<context>
-	    <initiatorPrincipalId>
-               <id></id>
-               <type>TERMINALID</type>
-            </initiatorPrincipalId>
-            <password>234343434</password>
-         </context>
-         <invoice>
-	<title>Thai Massage Center</title>
-            <invoiceRows>
-               <invoiceRow>
-                  <itemDescription>Thai Massage</itemDescription>
-                  <itemTotalAmount>
-                     <currency>SEK</currency>
-                     <value>500</value>
-                  </itemTotalAmount>
-               </invoiceRow>
-            </invoiceRows>
-            <totalAmount>
-               <currency>SEK</currency>
-               <value>500</value>
-            </totalAmount>
-         </invoice>
-*/
-
-$params = array("context" =>
-array(
-    "initiatorPrincipalId" =>
-    array(
-        "id" => "58af556cc3794c66a32aadbb7cab0a2c",
-        "type" => "TERMINALID"),
-    "password" => "AnReH4NevKSXkcJ",
-    "clientRequestTimeout" => "0"
-),
-    "invoice" =>
-    array(
-        "acknowledgmentMode" => "NO_ACKNOWLEDGMENT",
-        "title" => "Grand Cinema",
-        "totalAmount" =>
-        array(
-            "currency" => "USD",
-            "value" => "500"
-        ),
-        "backURL" => "http://devapi.seqr.com/sample/done.php",
-        "invoiceRows" =>
-        array(
-            "invoiceRow" =>
-            array(
-                "itemDescription" => "Movie Ticket",
-                "itemTotalAmount" =>
-                array(
-                    "currency" => "USD",
-                    "value" => "500"
-                )
-            )
-
-
-        )
-    ));
-
-
-$result = $soapClient->sendInvoice($params);
-
-$invoiceId = $result->return->invoiceReference;
-
-print_r("<!--\n");
-print_r($result);
-print_r("-->");
-?><!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <title>Webshop Demo</title>
@@ -92,10 +17,34 @@ print_r("-->");
 </head>
 <body>
 
-<h1>SEQR Demo Webshop</h1>
+<h1>SEQR Demo Webshop </h1>
 
-<script id="seqrShop"
-        src="http://devapi.seqr.com/seqr-webshop-plugin/js/seqrShop.js#!invoiceId=<?php echo $invoiceId; ?>&layout=standard&successCallback=paymentDone"></script>
+<script id="seqrShop" src="http://<?php echo $_SERVER['HTTP_HOST']; ?>/seqr-webshop-plugin/js/seqrShop.js">
+    {
+
+        "invoice" : {
+            "title" : "Grand Cinema",
+            "currency" : "USD",
+            "items" : [
+                {
+                    "description" : "Movie Ticket 1",
+                    "amount" : 16
+                },
+                {
+                    "description" : "Movie Ticket 2",
+                    "amount" : 24
+                }
+            ],
+            "backURL" : "http://<?php echo $_SERVER['HTTP_HOST']; ?>/seqr-webshop-sample/done.php"
+        },
+
+        "layout" : "small",
+        "paidCallback" : "paymentDone",
+        "apiURL" : "http://<?php echo $_SERVER['HTTP_HOST']; ?>/seqr-webshop-api",
+        "pollFreq" : 500
+
+    }
+</script>
 <br/>
 <br/>
 <br/>
@@ -115,7 +64,7 @@ print_r("-->");
             <h2>Send and receive money</h2>
 
             <p class="big">Does your best friend owe you money for the cab? Or do you want to send money to your mother?
-                With SEQR it´s a piece of cake.</p>
+                With SEQR it's a piece of cake.</p>
         </div>
 
         <div class="span6">
