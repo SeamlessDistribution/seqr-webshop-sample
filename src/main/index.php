@@ -38,7 +38,7 @@
             "backURL" : "http://<?php echo $_SERVER['HTTP_HOST']; ?>/seqr-webshop-sample/done.php"
         },
 
-        "layout" : "small",
+        "layout" : "standard",
         "paidCallback" : "paymentDone",
         "apiURL" : "http://<?php echo $_SERVER['HTTP_HOST']; ?>/seqr-webshop-api",
         "pollFreq" : 500
