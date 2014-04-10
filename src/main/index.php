@@ -1,4 +1,6 @@
-<!DOCTYPE html>
+<?php
+$protocol = $_SERVER['SERVER_PORT'] == '443' ? "https" : "http";
+?><!DOCTYPE html>
 <html>
 <head>
     <title>Webshop Demo</title>
@@ -19,7 +21,7 @@
 
 <h1>SEQR Demo Webshop </h1>
 
-<script id="seqrShop" src="http://<?php echo $_SERVER['HTTP_HOST']; ?>/seqr-webshop-plugin/js/seqrShop.js">
+<script id="seqrShop" src="<?php echo $protocol; ?>://<?php echo $_SERVER['HTTP_HOST']; ?>/seqr-webshop-plugin/js/seqrShop.js">
     {
 
         "invoice" : {
@@ -35,12 +37,12 @@
                     "amount" : 24
                 }
             ],
-            "backURL" : "http://<?php echo $_SERVER['HTTP_HOST']; ?>/seqr-webshop-sample/done.php"
+            "backURL" : "<?php echo $protocol; ?>://<?php echo $_SERVER['HTTP_HOST']; ?>/seqr-webshop-sample/done.php"
         },
 
         "layout" : "standard",
         "paidCallback" : "paymentDone",
-        "apiURL" : "http://<?php echo $_SERVER['HTTP_HOST']; ?>/seqr-webshop-api",
+        "apiURL" : "<?php echo $protocol; ?>://<?php echo $_SERVER['HTTP_HOST']; ?>/seqr-webshop-api",
         "pollFreq" : 500
 
     }
