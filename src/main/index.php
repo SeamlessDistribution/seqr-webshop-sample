@@ -1,91 +1,124 @@
 <?php
 $protocol = $_SERVER['SERVER_PORT'] == '443' ? "https" : "http";
+$pluginURL = '//' . $_SERVER['HTTP_HOST'] . '/seqr-webshop-plugin';
 ?><!DOCTYPE html>
 <html>
 <head>
     <title>Webshop Demo</title>
+    <meta name="viewport" content="initial-scale=1">
     <style>
+
+        @font-face {
+            font-family: 'Whitney-Book';
+            src: url('<?php echo $pluginURL ?>/fonts/book/whitneybookprogkcy.eot');
+            src: url('<?php echo $pluginURL ?>/fonts/book/whitneybookprogkcy.eot?#iefix') format('embedded-opentype'),
+            url('<?php echo $pluginURL ?>/fonts/book/whitneybookprogkcy.woff') format('woff'),
+            url('<?php echo $pluginURL ?>/fonts/book/whitneybookprogkcy.ttf') format('truetype'),
+            url('<?php echo $pluginURL ?>/fonts/book/whitneybookprogkcy.svg#whitneybookprogkcy') format('svg');
+            font-weight: normal;
+            font-style: normal;
+        }
+
         body {
-            width: 35em;
+            font-family: "Whitney-Book", Tahoma, Verdana, Arial, sans-serif;
+            margin: 10px;
+        }
+
+        #content {
+            max-width: 500px;
             margin: 0 auto;
-            font-family: Tahoma, Verdana, Arial, sans-serif;
         }
+
+        a {
+            color: #00a391;
+        }
+
     </style>
+    <script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
     <script>
-        function paymentDone(data) {
-            console.log(data);
+
+        function setCookie(key, value) {
+            var expires = new Date();
+            expires.setTime(expires.getTime() + (1 * 24 * 60 * 60 * 1000));
+            document.cookie = key + '=' + value + ';expires=' + expires.toUTCString();
         }
+
+        function sendInvoice() {
+            var invoice = {
+                "title": "Grand Cinema",
+                "currency": "USD",
+                "items": [
+                    {
+                        "description": "Movie Ticket 1",
+                        "amount": 16
+                    },
+                    {
+                        "description": "Movie Ticket 2",
+                        "amount": 24
+                    }
+                ],
+                "backURL": "<?php echo $protocol; ?>://<?php echo $_SERVER['HTTP_HOST']; ?>/seqr-webshop-sample/done.php",
+                "notificationUrl": "<?php echo $protocol; ?>://<?php echo $_SERVER['HTTP_HOST']; ?>/seqr-webshop-api/getPaymentStatus.php"
+            };
+            $.ajax({
+                type: "POST",
+                url: "//<?php echo $_SERVER['HTTP_HOST']; ?>/seqr-webshop-api/sendInvoice.php",
+                contentType: "application/json",
+                data: JSON.stringify(invoice)
+            }).done(function (data) {
+                setCookie("invoiceReference",data.invoiceReference);
+                $("#seqrStatus").html("Injecting Script...")
+                var statusURL = "//<?php echo $_SERVER['HTTP_HOST']; ?>/seqr-webshop-api/getPaymentStatus.php?invoiceReference=" + data.invoiceReference;
+                var script = document.createElement('script');
+                script.id = "seqrShop"
+                script.type = "text/javascript";
+                script.src = "//<?php echo $_SERVER['HTTP_HOST'] ?>/seqr-webshop-plugin/js/seqrShop.js#!statusCallback=statusUpdated&invoiceReference=" + data.invoiceReference + "&statusURL=" + encodeURIComponent(statusURL);
+                $("#seqrShop").replaceWith(script);
+            });
+        }
+
+        function statusUpdated(data) {
+            $("#seqrStatus").html("Status Updated: " + data.status);
+            $("#seqrRawStatus").html(JSON.stringify(data, null, 4));
+        }
+
+        $(document).ready(function () {
+            sendInvoice();
+        });
+
     </script>
 </head>
 <body>
+<div id="content">
 
-<h1>SEQR Demo Webshop </h1>
+    <h1>SEQR Webshop Plugin Demo</h1>
 
-<script id="seqrShop" src="<?php echo $protocol; ?>://<?php echo $_SERVER['HTTP_HOST']; ?>/seqr-webshop-plugin/js/seqrShop.js">
-    {
+    <p>
+        This demo shows how an invoice is created by calling <a
+            href="https://github.com/SeamlessDistribution/seqr-webshop-api">sample
+            REST services</a> implemented in PHP.
+    </p>
 
-        "invoice" : {
-            "title" : "Grand Cinema",
-            "currency" : "USD",
-            "items" : [
-                {
-                    "description" : "Movie Ticket 1",
-                    "amount" : 16
-                },
-                {
-                    "description" : "Movie Ticket 2",
-                    "amount" : 24
-                }
-            ],
-            "backURL" : "<?php echo $protocol; ?>://<?php echo $_SERVER['HTTP_HOST']; ?>/seqr-webshop-sample/done.php"
-        },
+    <p>
+        First a test purchase is made by calling sendInvoice. The result is then used to inject the <a
+            href="https://github.com/SeamlessDistribution/seqr-webshop-plugin">SEQR Webshop Plugin</a> into the
+        page. The plugin polls for an update by calling getPaymentStatus every second. When the status changes, the
+        plugin
+        updates it's appearance, and executes a callback that updates the status at the bottom of this page.
+    </p>
 
-        "layout" : "standard",
-        "paidCallback" : "paymentDone",
-        "apiURL" : "<?php echo $protocol; ?>://<?php echo $_SERVER['HTTP_HOST']; ?>/seqr-webshop-api",
-        "pollFreq" : 500
+    <p>
+        To make a test payment you must <a href="http://developer.seqr.com/app">download the demo</a> version of the
+        SEQR app and scan the QR code below. The source code for this demo is <a
+            href="https://github.com/SeamlessDistribution/seqr-webshop-sample">available on GitHub</a>.
+    </p>
 
-    }
-</script>
-<p>
-    <a href="http://developer.seqr.com/app">Make sure you have downloaded the development app to proceed with the demo!</a>
-</p>
-<p>
-    <a href="https://github.com/SeamlessDistribution/seqr-webshop-sample">Source code for this sample, check how easy it is!</a>
-</p>
-<div class="span12">
-    <div class="row">
+    <div id="seqrShop"></div>
 
-        <div class="span6">
-            <h2>Simple payment</h2>
+    <h3 id="seqrStatus">Sending Invoice...</h3>
 
-            <p class="big">Scan the QR-code at the checkout with your SEQR app, confirm with your PIN and you are done!
-                You just made a payment with SEQR.</p>
-        </div>
+    <pre><code id="seqrRawStatus"></code></pre>
 
-        <div class="span6">
-            <h2>Send and receive money</h2>
-
-            <p class="big">Does your best friend owe you money for the cab? Or do you want to send money to your mother?
-                With SEQR it's a piece of cake.</p>
-        </div>
-
-        <div class="span6">
-            <h2>Receipts in your phone</h2>
-
-            <p class="big">Forget about lost receipts. With SEQR you are always in control. And the receipt history is
-                always kept safe, even if you were to lose your phone.</p>
-        </div>
-
-        <div class="span6">
-            <h2>Valuable offers</h2>
-
-            <p class="big">With SEQR you receive great offers valid both online and in the shop around the corner. Be on
-                the lookout in your SEQR app so that you don't miss out!</p>
-        </div>
-
-    </div>
 </div>
-
 </body>
 </html>
