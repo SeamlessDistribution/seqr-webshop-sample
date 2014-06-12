@@ -1,6 +1,5 @@
 <?php
-$protocol = $_SERVER['SERVER_PORT'] == '443' ? "https" : "http";
-$pluginURL = '//' . $_SERVER['HTTP_HOST'] . '/seqr-webshop-plugin';
+$pluginURL = 'https://cdn.seqr.com/webshop-plugin';
 ?><!DOCTYPE html>
 <html>
 <head>
