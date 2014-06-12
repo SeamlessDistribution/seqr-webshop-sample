@@ -1,6 +1,6 @@
 <?php
 $protocol = $_SERVER['SERVER_PORT'] == '443' ? "https" : "http";
-$pluginURL = '//' . $_SERVER['HTTP_HOST'] . '/seqr-webshop-plugin';
+$pluginURL = 'https://cdn.seqr.com/webshop-plugin';
 ?><!DOCTYPE html>
 <html>
 <head>
@@ -62,7 +62,7 @@ $pluginURL = '//' . $_SERVER['HTTP_HOST'] . '/seqr-webshop-plugin';
                 var script = document.createElement('script');
                 script.id = "seqrShop"
                 script.type = "text/javascript";
-                script.src = "//<?php echo $_SERVER['HTTP_HOST'] ?>/seqr-webshop-plugin/js/seqrShop.js#!injectCSS=false&mode=demo&statusCallback=statusUpdated&invoiceQRCode=" + encodeURIComponent(data.invoiceQRCode) + "&statusURL=" + encodeURIComponent(statusURL);
+                script.src = "<?php echo $pluginURL ?>/js/seqrShop.js#!injectCSS=false&mode=demo&statusCallback=statusUpdated&invoiceQRCode=" + encodeURIComponent(data.invoiceQRCode) + "&statusURL=" + encodeURIComponent(statusURL);
                 $("#seqrShop").replaceWith(script);
             });
         }
