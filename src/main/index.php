@@ -6,21 +6,11 @@ $pluginURL = '//' . $_SERVER['HTTP_HOST'] . '/seqr-webshop-plugin';
 <head>
     <title>Webshop Demo</title>
     <meta name="viewport" content="initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="<?php echo $pluginURL ?>/css/seqrShop.css">
     <style>
 
-        @font-face {
-            font-family: 'Whitney-Book';
-            src: url('<?php echo $pluginURL ?>/fonts/book/whitneybookprogkcy.eot');
-            src: url('<?php echo $pluginURL ?>/fonts/book/whitneybookprogkcy.eot?#iefix') format('embedded-opentype'),
-            url('<?php echo $pluginURL ?>/fonts/book/whitneybookprogkcy.woff') format('woff'),
-            url('<?php echo $pluginURL ?>/fonts/book/whitneybookprogkcy.ttf') format('truetype'),
-            url('<?php echo $pluginURL ?>/fonts/book/whitneybookprogkcy.svg#whitneybookprogkcy') format('svg');
-            font-weight: normal;
-            font-style: normal;
-        }
-
         body {
-            font-family: "Whitney-Book", Tahoma, Verdana, Arial, sans-serif;
+            font-family: "SEQR", Helvetica, Arial, sans-serif;
             margin: 10px;
         }
 
@@ -66,13 +56,13 @@ $pluginURL = '//' . $_SERVER['HTTP_HOST'] . '/seqr-webshop-plugin';
                 contentType: "application/json",
                 data: JSON.stringify(invoice)
             }).done(function (data) {
-                setCookie("invoiceReference",data.invoiceReference);
+                setCookie("invoiceReference", data.invoiceReference);
                 $("#seqrStatus").html("Injecting Script...")
                 var statusURL = "//<?php echo $_SERVER['HTTP_HOST']; ?>/seqr-webshop-api/getPaymentStatus.php?invoiceReference=" + data.invoiceReference;
                 var script = document.createElement('script');
                 script.id = "seqrShop"
                 script.type = "text/javascript";
-                script.src = "//<?php echo $_SERVER['HTTP_HOST'] ?>/seqr-webshop-plugin/js/seqrShop.js#!statusCallback=statusUpdated&invoiceReference=" + data.invoiceReference + "&statusURL=" + encodeURIComponent(statusURL);
+                script.src = "//<?php echo $_SERVER['HTTP_HOST'] ?>/seqr-webshop-plugin/js/seqrShop.js#!injectCSS=false&mode=demo&statusCallback=statusUpdated&invoiceQRCode=" + encodeURIComponent(data.invoiceQRCode) + "&statusURL=" + encodeURIComponent(statusURL);
                 $("#seqrShop").replaceWith(script);
             });
         }
@@ -108,7 +98,7 @@ $pluginURL = '//' . $_SERVER['HTTP_HOST'] . '/seqr-webshop-plugin';
     </p>
 
     <p>
-        To make a test payment you must <a href="http://developer.seqr.com/app">download the demo</a> version of the
+        To make a test payment you must <a href="http://developer.seqr.com/app">install the demo</a> version of the
         SEQR app and scan the QR code below. The source code for this demo is <a
             href="https://github.com/SeamlessDistribution/seqr-webshop-sample">available on GitHub</a>.
     </p>
