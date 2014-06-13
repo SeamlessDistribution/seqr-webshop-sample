@@ -19,6 +19,11 @@ $pluginURL = 'https://cdn.seqr.com/webshop-plugin';
             margin: 0 auto;
         }
 
+        #seqrRawStatus {
+            font-size: 10px;
+            opacity: 0.7;
+        }
+
         a {
             color: #00a391;
         }
